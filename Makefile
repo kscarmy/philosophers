@@ -8,11 +8,13 @@ CFLAGS = -Wall -Wextra -Werror
 
 SRC_C = srcs/ft_exit_error.c\
 			srcs/ft_utils.c\
+			srcs/ft_taches.c\
 
 MAIN_C = srcs/main.c\
 
 OBJS = ft_exit_error.o\
 			ft_utils.o\
+			ft_taches.o\
 
 
 all : $(NAME)

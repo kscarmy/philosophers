@@ -6,11 +6,54 @@
 /*   By: guderram <guderram@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 15:53:20 by guderram          #+#    #+#             */
-/*   Updated: 2021/10/20 13:58:45 by guderram         ###   ########.fr       */
+/*   Updated: 2021/11/05 17:15:20 by guderram         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/libft.h"
+
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+
+void	ft_putnbr(long nb)
+{
+	if (nb != -2147483648)
+	{
+		if (nb < 0)
+		{
+			nb = nb * -1;
+			ft_putchar('-');
+		}
+		if (nb > 9)
+		{
+			ft_putnbr(nb / 10);
+			ft_putnbr(nb % 10);
+		}
+		else
+			ft_putchar(nb + '0');
+	}
+	else
+	{
+		ft_putchar('-');
+		ft_putchar('2');
+		ft_putnbr(147483648);
+	}
+}
+
+void	ft_print_philo_status(t_point *strc) // A SUPPRIMER
+{
+	int i = 0;
+
+	while (i < strc->nphi)
+	{
+		printf("philo '%ld' ", strc->phi[i].pos);
+		printf("tdie '%ld' ", strc->phi[i].tstart);
+		printf("\n");
+		i++;
+	}
+}
 
 void	ft_putstr(char *str)
 {
@@ -58,10 +101,11 @@ int	ft_isdigit(int c) // 1 si oui, 0 si non
 		return (0);
 }
 
-size_t	get_time(void) // TEST
+size_t	ft_get_time(void) // TEST
 {
 	static struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
+

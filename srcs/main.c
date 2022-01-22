@@ -6,11 +6,38 @@
 /*   By: guderram <guderram@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 15:51:37 by guderram          #+#    #+#             */
-/*   Updated: 2021/10/20 13:59:18 by guderram         ###   ########.fr       */
+/*   Updated: 2021/11/04 18:56:46 by guderram         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/libft.h"
+
+int	ft_init_philo(t_point *strc) // initialise les philos
+{
+	int i;
+
+	i = 0;
+	strc->phi = malloc(sizeof(v_point) * strc->nphi);
+	if (strc->phi == NULL)
+		return(ft_free_malloc(3, strc));
+	while (i < strc->nphi)
+	{
+		strc->phi[i].pos = i;
+		strc->phi[i].tstart = ft_get_time();
+		strc->phi[i].strc = strc;
+		i++;
+	}
+	strc->forks = malloc(sizeof(size_t) * (strc->nphi + 1));
+	if (strc->forks == NULL)
+		return(ft_free_malloc(3, strc));
+	i = 0;
+	while (i < strc->nphi)
+	{
+		strc->forks[i] = -1;
+		i++;
+	}
+	return (1);
+}
 
 int	ft_init_struct(char **str, t_point *strc, int argc) // initialise la structure de donnees, 1 OK sinon 0
 {
@@ -67,8 +94,14 @@ int	main(int argc, char **argv)
 	
 	if (ft_init_struct(argv, &strc, argc) == 0)
 		return (ft_exit_error(2));
-	strc.time = get_time();
+	strc.time = ft_get_time();
 	printf("heure : '%ld'\n", strc.time);
+	if (ft_init_philo(&strc) == 0)
+		return (-1);
+	
+	ft_print_philo_status(&strc);
+	if (ft_go_taches(&strc) != 1)
+		return (-1);
 	// strc.phi.pos = 45;
 	// printf("phi : %d", strc.phi.pos);
 	// printf("main :\n'%d'\n'%ld'\n'%ld'\n'%ld'\n'%ld'\n'%ld'\n", strc.argc, strc.nphi, strc.tdie, strc.teat, strc.tslp, strc.ntpe);
