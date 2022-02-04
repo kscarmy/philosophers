@@ -6,7 +6,7 @@
 /*   By: guderram <guderram@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 15:51:37 by guderram          #+#    #+#             */
-/*   Updated: 2021/11/04 18:56:46 by guderram         ###   ########.fr       */
+/*   Updated: 2022/02/04 22:44:53 by guderram         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,16 @@ int	ft_init_philo(t_point *strc) // initialise les philos
 	while (i < strc->nphi)
 	{
 		strc->phi[i].pos = i;
-		strc->phi[i].tstart = ft_get_time();
+		strc->phi[i].last_eat = ft_get_time();
 		strc->phi[i].strc = strc;
+		strc->phi[i].nbr_eat = 0;
+		pthread_mutex_init(&strc->phi[i].fork, NULL);
 		i++;
 	}
-	strc->forks = malloc(sizeof(size_t) * (strc->nphi + 1));
-	if (strc->forks == NULL)
-		return(ft_free_malloc(3, strc));
 	i = 0;
 	while (i < strc->nphi)
 	{
-		strc->forks[i] = -1;
+		pthread_create(&strc->phi[i].thread, NULL, ft_taches, (void *)&strc->phi[i]);
 		i++;
 	}
 	return (1);
@@ -46,6 +45,9 @@ int	ft_init_struct(char **str, t_point *strc, int argc) // initialise la structu
 	strc->tdie = ft_long_atoi(str[2]);
 	strc->teat = ft_long_atoi(str[3]);
 	strc->tslp = ft_long_atoi(str[4]);
+	strc->stop = 0;
+	pthread_mutex_init(&strc->take_forks, NULL);
+	pthread_mutex_init(&strc->say_message, NULL);
 	if (argc == 6)
 		strc->ntpe = ft_long_atoi(str[5]);
 	else
@@ -94,16 +96,19 @@ int	main(int argc, char **argv)
 	
 	if (ft_init_struct(argv, &strc, argc) == 0)
 		return (ft_exit_error(2));
-	strc.time = ft_get_time();
-	printf("heure : '%ld'\n", strc.time);
+	// strc.time = ft_get_time();
+	// printf("heure : '%ld'\n", strc.time);
 	if (ft_init_philo(&strc) == 0)
 		return (-1);
 	
-	ft_print_philo_status(&strc);
-	if (ft_go_taches(&strc) != 1)
-		return (-1);
+	// ft_print_philo_status(&strc);
+	// if (ft_go_taches(&strc) != 1)
+	// 	return (-1);
 	// strc.phi.pos = 45;
 	// printf("phi : %d", strc.phi.pos);
 	// printf("main :\n'%d'\n'%ld'\n'%ld'\n'%ld'\n'%ld'\n'%ld'\n", strc.argc, strc.nphi, strc.tdie, strc.teat, strc.tslp, strc.ntpe);
+	while (ft_still_alive(&strc) == 1)
+	{
+	}
 	return (0);
 }
