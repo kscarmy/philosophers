@@ -6,7 +6,7 @@
 /*   By: guderram <guderram@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 16:48:32 by guderram          #+#    #+#             */
-/*   Updated: 2022/02/04 23:07:18 by guderram         ###   ########.fr       */
+/*   Updated: 2022/02/05 03:22:41 by guderram         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,17 @@ void	ft_print_message(t_point *strc, long pos, char *msg) // ecrit un message su
 
 void	ft_time_to_take_forks(v_point *phi) // Fonction permettant au philo de prendre et lock le mutex des forks
 {
+	pthread_mutex_lock(&phi->strc->take_forks);
 	pthread_mutex_lock(&phi->fork); // fork du philo
 	ft_print_message(phi->strc ,phi->pos, "has taken a fork");
-	if (phi->pos == 0) // si phi est le premier
-		pthread_mutex_lock(&phi->strc->phi[phi->strc->nphi].fork); // alors prend la fork du dernier
-	else
-		pthread_mutex_lock(&phi->strc->phi[phi->pos - 1].fork); // sinon prend celle du phi precedent
-	ft_print_message(phi->strc ,phi->pos, "has taken a fork");
-	
+	if (phi->strc->nphi > 1)
+	{
+		if (phi->pos == 0) // si phi est le premier
+			pthread_mutex_lock(&phi->strc->phi[phi->strc->nphi].fork); // alors prend la fork du dernier
+		else
+			pthread_mutex_lock(&phi->strc->phi[phi->pos - 1].fork); // sinon prend celle du phi precedent
+		ft_print_message(phi->strc ,phi->pos, "has taken a fork");
+	}
 	
 
 }
@@ -54,26 +57,32 @@ void	ft_time_to_eat(v_point *phi) // fait manger un philo
 		pthread_mutex_unlock(&phi->strc->phi[phi->strc->nphi].fork); // alors rend la fork du dernier
 	else
 		pthread_mutex_unlock(&phi->strc->phi[phi->pos - 1].fork); // sinon rend celle du phi precedent
-	
+	pthread_mutex_unlock(&phi->strc->take_forks);
 	phi->nbr_eat = phi->nbr_eat + 1; // incre le nombre de repas de phi
-	
-	
 }
 
 void	*ft_taches(void *ptr) // execute les differentes taches requise
 {
 	v_point *phi;
-	
+
 	phi = (v_point *)ptr;
+	// if (phi->strc->nphi > 1)
+	// {
 	ft_time_to_take_forks(phi);
-	ft_time_to_eat(phi);
+	if (phi->strc->nphi > 1)
+	{
+		ft_time_to_eat(phi);
+
 
 	/*		va dormir		*/
-	ft_print_message(phi->strc ,phi->pos, "is sleeping");
-	usleep(phi->strc->tslp * 1000);
-	ft_print_message(phi->strc ,phi->pos, "is thinking");
+	
+		ft_print_message(phi->strc ,phi->pos, "is sleeping");
+		usleep(phi->strc->tslp * 1000);
+		ft_print_message(phi->strc ,phi->pos, "is thinking");
+	}
 	if (phi->strc->stop == 0)
 		ft_taches(ptr);
+	// }	
 	return (0);
 }
 

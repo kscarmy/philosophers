@@ -6,7 +6,7 @@
 /*   By: guderram <guderram@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 15:51:37 by guderram          #+#    #+#             */
-/*   Updated: 2022/02/04 22:44:53 by guderram         ###   ########.fr       */
+/*   Updated: 2022/02/05 03:31:31 by guderram         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ int	ft_init_philo(t_point *strc) // initialise les philos
 		pthread_mutex_init(&strc->phi[i].fork, NULL);
 		i++;
 	}
-	i = 0;
-	while (i < strc->nphi)
-	{
-		pthread_create(&strc->phi[i].thread, NULL, ft_taches, (void *)&strc->phi[i]);
-		i++;
-	}
+	// i = 0;
+	// while (i < strc->nphi)
+	// {
+	// 	pthread_create(&strc->phi[i].thread, NULL, ft_taches, (void *)&strc->phi[i]);
+	// 	i++;
+	// }
 	return (1);
 }
 
@@ -86,6 +86,25 @@ int	ft_verif_argv(char **str, int argc) // ret 1 OK, sinon ret 0 PB
 	return (1);
 }
 
+void	ft_start_thread(t_point *strc)
+{
+	int	i;
+
+	i = 0;
+	while (i < strc->nphi)
+	{
+		pthread_create(&strc->phi[i].thread, NULL, ft_taches, (void *)&strc->phi[i]);
+		i = i + 2;
+	}
+	i = 1;
+	usleep(10 * 1000);
+	while (i < strc->nphi)
+	{
+		pthread_create(&strc->phi[i].thread, NULL, ft_taches, (void *)&strc->phi[i]);
+		i = i + 2;
+	}
+}
+
 int	main(int argc, char **argv)
 {
 	t_point	strc;
@@ -96,17 +115,9 @@ int	main(int argc, char **argv)
 	
 	if (ft_init_struct(argv, &strc, argc) == 0)
 		return (ft_exit_error(2));
-	// strc.time = ft_get_time();
-	// printf("heure : '%ld'\n", strc.time);
 	if (ft_init_philo(&strc) == 0)
 		return (-1);
-	
-	// ft_print_philo_status(&strc);
-	// if (ft_go_taches(&strc) != 1)
-	// 	return (-1);
-	// strc.phi.pos = 45;
-	// printf("phi : %d", strc.phi.pos);
-	// printf("main :\n'%d'\n'%ld'\n'%ld'\n'%ld'\n'%ld'\n'%ld'\n", strc.argc, strc.nphi, strc.tdie, strc.teat, strc.tslp, strc.ntpe);
+	ft_start_thread(&strc);
 	while (ft_still_alive(&strc) == 1)
 	{
 	}
