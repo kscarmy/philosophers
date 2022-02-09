@@ -6,7 +6,7 @@
 /*   By: guderram <guderram@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 15:51:37 by guderram          #+#    #+#             */
-/*   Updated: 2022/02/05 03:31:31 by guderram         ###   ########.fr       */
+/*   Updated: 2022/02/09 10:21:22 by guderram         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	ft_init_philo(t_point *strc) // initialise les philos
 	while (i < strc->nphi)
 	{
 		strc->phi[i].pos = i;
-		strc->phi[i].last_eat = ft_get_time();
+		// strc->phi[i].last_eat = ft_get_time();
 		strc->phi[i].strc = strc;
 		strc->phi[i].nbr_eat = 0;
 		pthread_mutex_init(&strc->phi[i].fork, NULL);
@@ -94,6 +94,7 @@ void	ft_start_thread(t_point *strc)
 	while (i < strc->nphi)
 	{
 		pthread_create(&strc->phi[i].thread, NULL, ft_taches, (void *)&strc->phi[i]);
+		strc->phi[i].last_eat = ft_get_time();
 		i = i + 2;
 	}
 	i = 1;
@@ -101,6 +102,7 @@ void	ft_start_thread(t_point *strc)
 	while (i < strc->nphi)
 	{
 		pthread_create(&strc->phi[i].thread, NULL, ft_taches, (void *)&strc->phi[i]);
+		strc->phi[i].last_eat = ft_get_time();
 		i = i + 2;
 	}
 }
@@ -120,6 +122,7 @@ int	main(int argc, char **argv)
 	ft_start_thread(&strc);
 	while (ft_still_alive(&strc) == 1)
 	{
+		usleep(8 * 1000);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: guderram <guderram@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 16:48:32 by guderram          #+#    #+#             */
-/*   Updated: 2022/02/05 03:22:41 by guderram         ###   ########.fr       */
+/*   Updated: 2022/02/09 10:15:29 by guderram         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,14 @@ void	ft_time_to_take_forks(v_point *phi) // Fonction permettant au philo de pren
 			pthread_mutex_lock(&phi->strc->phi[phi->pos - 1].fork); // sinon prend celle du phi precedent
 		ft_print_message(phi->strc ,phi->pos, "has taken a fork");
 	}
-	
+	pthread_mutex_unlock(&phi->strc->take_forks);
 
 }
 
 void	ft_time_to_eat(v_point *phi) // fait manger un philo
 {
-	
-	ft_print_message(phi->strc ,phi->pos, "is eating");
 	phi->last_eat = ft_get_time(); // dernier repas de phi, temps pri au debut du repas
+	ft_print_message(phi->strc ,phi->pos, "is eating");
 	usleep(phi->strc->teat * 1000);
 
 	/*			rend les fouchettes			*/
@@ -57,7 +56,7 @@ void	ft_time_to_eat(v_point *phi) // fait manger un philo
 		pthread_mutex_unlock(&phi->strc->phi[phi->strc->nphi].fork); // alors rend la fork du dernier
 	else
 		pthread_mutex_unlock(&phi->strc->phi[phi->pos - 1].fork); // sinon rend celle du phi precedent
-	pthread_mutex_unlock(&phi->strc->take_forks);
+	// pthread_mutex_unlock(&phi->strc->take_forks);
 	phi->nbr_eat = phi->nbr_eat + 1; // incre le nombre de repas de phi
 }
 
@@ -137,7 +136,7 @@ int		ft_still_alive(t_point *strc) // ret 1 ok sinon erreur
 			i++;
 	}
 	// printf("tdie : %lu\n", (time - strc->phi[i].last_eat));
-	if (strc->stop != 0)
+	if (strc->stop != 0 && feed != strc->ntpe)
 	{
 		// printf("time : %llu\n", time);
 		// printf("last eat : %llu\n", strc->phi[i].last_eat);
@@ -146,7 +145,10 @@ int		ft_still_alive(t_point *strc) // ret 1 ok sinon erreur
 		return (0);
 	}
 	if (feed == strc->nphi)
+	{
+		strc->stop = 1;
 		return (0);
+	}
 
 	// if (((long)(time - phi->last_eat) >= phi->strc->tdie) && phi->last_eat != 0)
 	// {

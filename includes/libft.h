@@ -6,7 +6,7 @@
 /*   By: guderram <guderram@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 15:50:58 by guderram          #+#    #+#             */
-/*   Updated: 2022/02/04 23:05:37 by guderram         ###   ########.fr       */
+/*   Updated: 2022/02/09 09:23:29 by guderram         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	ft_putchar(char c);
 void	ft_putnbr(unsigned long long nb);
 
 void	ft_print_philo_status(t_point *strc); // A SUPPRIMER
-unsigned long long	ft_get_time(void); // TEST
+unsigned long long	ft_get_time(void); // renvoie lheure
 
 int		ft_isdigit(int c); // 1 si oui, 0 si non
 long	ft_long_atoi(const char *nptr);
