@@ -6,7 +6,7 @@
 /*   By: guderram <guderram@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 15:51:37 by guderram          #+#    #+#             */
-/*   Updated: 2022/02/09 10:21:22 by guderram         ###   ########.fr       */
+/*   Updated: 2022/02/09 11:04:44 by guderram         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,8 @@ int	main(int argc, char **argv)
 	ft_start_thread(&strc);
 	while (ft_still_alive(&strc) == 1)
 	{
-		usleep(8 * 1000);
+		usleep(4 * 1000); // securitee : si le nombre diminue cela augmente le nombre de passes
 	}
+	free(strc.phi);
 	return (0);
 }
