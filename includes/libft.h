@@ -6,7 +6,7 @@
 /*   By: guderram <guderram@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 15:50:58 by guderram          #+#    #+#             */
-/*   Updated: 2022/02/09 09:23:29 by guderram         ###   ########.fr       */
+/*   Updated: 2022/02/09 11:52:42 by guderram         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,24 +58,26 @@ int		ft_free_malloc(int error, t_point *strc); // free les mallocs et retourne u
 void	ft_putchar(char c);
 void	ft_putnbr(unsigned long long nb);
 
-void	ft_print_philo_status(t_point *strc); // A SUPPRIMER
 unsigned long long	ft_get_time(void); // renvoie lheure
-
 int		ft_isdigit(int c); // 1 si oui, 0 si non
-long	ft_long_atoi(const char *nptr);
 void	ft_putstr(char *str);
 
 // main.c
 int	ft_init_philo(t_point *str); // initialise les philos
-
+void	ft_start_thread(t_point *strc);
 int		ft_verif_argv(char **str, int argc); // ret 1 OK, sinon ret 0 PB
 int	ft_init_struct(char ** str, t_point *strc, int argc); // initialise la structure de donnees, 1 OK sinon 0
 
 // ft_taches.c
-void	ft_print_message(t_point *strc, long pos, char *msg); // ecrit un message sur la sortie standard
+
 void	*ft_taches(void *ptr); // execute les differentes taches requise
 int		ft_go_taches(t_point *strc); // ret 1 ok sinon erreur
 int		ft_still_alive(t_point *strc); // ret 1 ok sinon erreur
 void	ft_time_to_eat(v_point *philo); // fait manger un philo
+void	ft_time_to_take_forks(v_point *phi);
 
+
+void	ft_print_message(t_point *strc, long pos, char *msg); // ecrit un message sur la sortie standard
+long	ft_long_atoi(const char *nptr);
+int	ft_still_alive_bis(t_point *strc, long feed, long i);
 #endif
