@@ -6,7 +6,7 @@
 /*   By: guderram <guderram@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 15:51:37 by guderram          #+#    #+#             */
-/*   Updated: 2022/02/09 11:08:35 by guderram         ###   ########.fr       */
+/*   Updated: 2022/02/09 14:04:26 by guderram         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_init_philo(t_point *strc)
 	int	i;
 
 	i = 0;
-	strc->phi = malloc(sizeof(v_point) * strc->nphi);
+	strc->phi = malloc(sizeof(t_pointp) * strc->nphi);
 	if (strc->phi == NULL)
 		return (ft_free_malloc(3, strc));
 	while (i < strc->nphi)

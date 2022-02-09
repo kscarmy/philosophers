@@ -6,13 +6,13 @@
 /*   By: guderram <guderram@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 16:48:32 by guderram          #+#    #+#             */
-/*   Updated: 2022/02/09 11:48:29 by guderram         ###   ########.fr       */
+/*   Updated: 2022/02/09 14:03:50 by guderram         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/libft.h"
 
-void	ft_time_to_take_forks(v_point *phi)
+void	ft_time_to_take_forks(t_pointp *phi)
 {
 	pthread_mutex_lock(&phi->strc->take_forks);
 	pthread_mutex_lock(&phi->fork);
@@ -28,7 +28,7 @@ void	ft_time_to_take_forks(v_point *phi)
 	pthread_mutex_unlock(&phi->strc->take_forks);
 }
 
-void	ft_time_to_eat(v_point *phi)
+void	ft_time_to_eat(t_pointp *phi)
 {
 	phi->last_eat = ft_get_time();
 	ft_print_message(phi->strc, phi->pos, "is eating");
@@ -43,9 +43,9 @@ void	ft_time_to_eat(v_point *phi)
 
 void	*ft_taches(void *ptr)
 {
-	v_point	*phi;
+	t_pointp	*phi;
 
-	phi = (v_point *)ptr;
+	phi = (t_pointp *)ptr;
 	ft_time_to_take_forks(phi);
 	if (phi->strc->nphi > 1)
 	{
